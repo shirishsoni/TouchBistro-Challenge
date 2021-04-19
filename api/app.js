@@ -14,3 +14,5 @@ app.use(router)
 app.listen(4000,function(){
     console.log("Listening");
 });
+
+module.exports = app

@@ -28,21 +28,21 @@ function Input(){
                 'Content-Type' : "application/json",
             },
             "body" : JSON.stringify({
-                max : value
+                max : state.value
             })
-        }).then(res => res.json()).then(result => {
+        })
+        .then(res => res.json())
+        .then(result => {
             alert(result.median);
         });
-        
-        alert("Submitted");
     }
 
     return (
         <>
             {
-                state.isValid?null: "Enter a valid Value."
+                state.isValid ? null: <span>Enter a valid value.</span>
             }
-            <input type="text" value={state.value} onChange={handleChange} />
+            <input placeholder='Enter value' type="text" value={state.value} onChange={handleChange} />
             <button disabled={!state.isValid} onClick={handleSubmit}>Submit</button>
         </>
     )
