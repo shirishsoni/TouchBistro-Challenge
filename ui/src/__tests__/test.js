@@ -1,28 +1,38 @@
-import { render, fireEvent } from '@testing-library/react';
-import React from 'react';
+import { React } from 'react';
+import { screen, render, fireEvent } from '@testing-library/react';
 import Input from '../Components/Input';
-import { screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event'
+import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom/extend-expect'
 
-describe('Prime number UI tests', function(){
-    test("Renders without error", function(){
-        render(<Input></Input>);
-    })
+describe("Prime numbers test", function () {
+    test("Renders Properly", function () {
+        render(<Input />);
+    });
 
-    test("Valid numeric input does not give error", function(){
-        render(<Input></Input>)
-        const input = screen.findByPlaceholderText("Enter value");
-        fireEvent.change(input, { target: { value: '23' } })
-        const error = screen.queryByText("Enter a valid value.");
-        expect(error).toBeNull();
-    })
-
-    test("Invalid input does give error", async function(){
-        render(<Input></Input>)
-        const input = screen.findByPlaceholderText("Enter value");
-        fireEvent.change(input, { target: { value: 'abc' } })
-        await waitFor(() => screen.getByText("Enter a valid value."));
-        const error = screen.getByText("Enter a valid value.");
+    test("Value less than 3 shows error", async function () {
+        render(<Input />);
+        const input = await screen.findByPlaceholderText("Enter value");
+        userEvent.type(input, "2");
+        const error = await screen.queryByText("Value must be greater than 2");
         expect(error).toBeInTheDocument();
+        expect(error.hidden).toBeFalsy();
+    })
+
+    test("Valid value does not show error", async function () {
+        render(<Input />);
+        const input = await screen.findByPlaceholderText("Enter value");
+        userEvent.type(input, "1000");
+        const error = await screen.queryByText("Please enter digits");
+        expect(error).toBeInTheDocument();
+        expect(error.hidden).toBeTruthy();
+    });
+
+    test("Invalid value shows error", async function () {
+        render(<Input />);
+        const input = await screen.findByPlaceholderText("Enter value");
+        userEvent.type(input, "ABC");
+        const error = await screen.queryByText("Please enter digits");
+        expect(error).toBeInTheDocument();
+        expect(error.hidden).toBeFalsy();
     })
 });

@@ -5,7 +5,7 @@ import Input from './Components/Input';
 
 function App() {
   return (
-    <div className="App">
+    <div className="container">
       <Input />
     </div>
   );
